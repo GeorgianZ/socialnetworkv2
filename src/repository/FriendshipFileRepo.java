@@ -7,6 +7,9 @@ import validate.Validator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 public class FriendshipFileRepo extends AbstractFileRepository<Tuple<Long, Long>, Friendship> {
@@ -33,13 +36,15 @@ public class FriendshipFileRepo extends AbstractFileRepository<Tuple<Long, Long>
     }
     @Override
     public Friendship extractEntity(List<String> attributes) {
-        Friendship friendship = new Friendship(Long.parseLong(attributes.get(0)), Long.parseLong(attributes.get(1)));
+        Friendship friendship;
+        friendship = new Friendship(Long.parseLong(attributes.get(0)), Long.parseLong(attributes.get(1)));
+                // LocalDateTime.parse(attributes.get(2))));
         return friendship;
     }
 
     @Override
     protected String createEntityAsString(Friendship entity) {
-        return entity.getUser1()+";"+entity.getUser2();
+        return entity.getUser1()+";"+entity.getUser2()+";"+entity.getDateTime();
     }
 }
 

@@ -32,5 +32,11 @@ public interface Repository<ID, E extends Entity<ID>> {
      */
     E delete(ID id) throws IOException;
 
+    /**
+     * @param entity - entity to be modified to repository
+     * @return null if the id the given entity doesn't exist otherwise returns the entity before the modified action
+     * @throw ValidationException
+     */
+    E update(E entity);
 
 }

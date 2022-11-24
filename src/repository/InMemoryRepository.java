@@ -54,5 +54,22 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
             return entities.remove(id);
     }
 
+    @Override
+    public E update(E entity){
+        validator.validate(entity);
+        if(entities.get(entity.getId()) != null){
+            E entity1 = entities.get(entity.getId());
+            try {
+                delete(entity.getId());
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+            entities.put(entity.getId(), entity);
+            return entity1;
+        }
+        return null;
+    }
+
 
 }

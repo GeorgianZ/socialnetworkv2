@@ -1,10 +1,13 @@
 package domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Friendship extends Entity<Tuple<Long, Long>> {
     private long user1;
     private long user2;
+
+    private LocalDateTime dateTime;
 
 
     /***
@@ -20,13 +23,20 @@ public class Friendship extends Entity<Tuple<Long, Long>> {
         } else {
             setId(new Tuple<>(user2, user1));
         }
+        this.dateTime = LocalDateTime.now();
     }
+
 
     /***
      * return user1
      * */
     public long getUser1() {
         return user1;
+    }
+
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     /***
@@ -68,6 +78,7 @@ public class Friendship extends Entity<Tuple<Long, Long>> {
         return "Friendship{" +
                 "user1=" + user1 +
                 ", user2=" + user2 +
+                ", dateTime=" + dateTime +
                 '}';
     }
 }

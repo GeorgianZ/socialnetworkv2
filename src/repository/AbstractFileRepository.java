@@ -63,6 +63,18 @@ public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends I
     }
 
     /**
+     * @param entity - entity to be modified to repository
+     * @return
+     */
+    @Override
+    public E update(E entity){
+        E e = super.update(entity);
+        if(e != null)
+            writeToFile(entity);
+        return e;
+    }
+
+    /**
      * write to file the given entity
      * @param entity
      */

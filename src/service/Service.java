@@ -3,7 +3,7 @@ package service;
 import domain.Friendship;
 import domain.Tuple;
 import domain.User;
-import repository.Repository;
+import repository.database.Repository;
 import utils.Graph;
 
 import java.io.IOException;
@@ -41,6 +41,11 @@ public class Service {
         return u1;
     }
 
+    public User updateUser(User u){
+        User u1 = repo.update(u);
+        return u1;
+    }
+
     /**
      * remove user from repo
      *
@@ -57,7 +62,7 @@ public class Service {
             }
             User user = repo.delete(u.getId());
             return user;
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return null;
@@ -85,6 +90,20 @@ public class Service {
         return null;
     }
 
+    public Friendship updateFriendship(Long l1, Long l2){
+        boolean bool1 = repo.find(l1).addFriend(repo.find(l2));
+        boolean bool2 = repo.find(l2).addFriend(repo.find(l1));
+
+        if (bool1 || bool2) {
+            if (bool1 && bool2) {
+                Friendship f = new Friendship(l1, l2);
+                network.update(f);
+                return f;
+            }
+        }
+        return null;
+    }
+
     /**
      * delete a friendship from network
      *
@@ -98,7 +117,7 @@ public class Service {
         try {
             Friendship f = new Friendship(l1, l2);
             network.delete(new Tuple<>(l1, l2));
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new Friendship(l1, l2);
         }

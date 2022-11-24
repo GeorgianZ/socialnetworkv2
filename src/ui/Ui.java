@@ -5,6 +5,7 @@ import domain.User;
 import service.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Ui {
     private Service service;
@@ -37,6 +38,21 @@ public class Ui {
             else System.out.println("User added");
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void updateUser(String lastName, String firstName, String lastName1, String firstName1) {
+        User user = new User(firstName, lastName);
+        for (User u : service.getUsers()) {
+            //id = u.getId();
+            System.out.println(u.getLastName());
+            if (Objects.equals(u.getLastName(), firstName) && Objects.equals(u.getFirstName(), lastName)) {
+
+                removeUser(lastName, firstName);
+                addUser(lastName1, firstName1);
+                break;
+            }
         }
 
     }
@@ -83,6 +99,28 @@ public class Ui {
             System.out.println("Incorrect id");
         else {
             Friendship f = service.addFriendship(id1, id2);
+            if (f == null)
+                System.out.println("Friendship already exists");
+            else
+                System.out.println(f);
+        }
+
+    }
+
+    public void updateFrienship(long id1, long id2) {
+        User u1 = null;
+        User u2 = null;
+        for (User u : service.getUsers()) {
+            if (u.getId() == id1)
+                u1 = u;
+            if (u.getId() == id2)
+                u2 = u;
+        }
+
+        if (u1 == null || u2 == null)
+            System.out.println("Incorrect id");
+        else {
+            Friendship f = service.updateFriendship(id1, id2);
             if (f == null)
                 System.out.println("Friendship already exists");
             else

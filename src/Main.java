@@ -2,8 +2,10 @@ import domain.Friendship;
 import domain.Tuple;
 import domain.User;
 import repository.FriendshipFileRepo;
-import repository.Repository;
 import repository.UserFileRepo;
+import repository.database.FriendshipDBRepository;
+import repository.database.Repository;
+import repository.database.UserDBRepository;
 import service.Service;
 import ui.Ui;
 import validate.FriendshipValidator;
@@ -17,11 +19,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
         //String fileName=ApplicationContext.getPROPERTIES().getProperty("socialnetwork.users");
-        String fileName = "F:\\metAvansate\\socialnetwork\\src\\repository\\users.csv";
-        String fileName1 = "F:\\metAvansate\\socialnetwork\\src\\repository\\friendship.csv";
-        Repository<Long, User> userFileRepository = new UserFileRepo(new UserValidator(), fileName);
-        Repository<Tuple<Long,Long>, Friendship> friendshipFileRepo = new FriendshipFileRepo(new FriendshipValidator(), fileName1);
-        Service service = new Service(userFileRepository, friendshipFileRepo);
+        String fileName = "F:\\metAvansate\\socialnetworkv2\\src\\repository\\users.csv";
+        String fileName1 = "F:\\metAvansate\\socialnetworkv2\\src\\repository\\friendship.csv";
+        //Repository<Long, User> userFileRepository = new UserFileRepo(new UserValidator(), fileName);
+        //Repository<Tuple<Long,Long>, Friendship> friendshipFileRepo = new FriendshipFileRepo(new FriendshipValidator(), fileName1);
+        Repository<Long, User> repoDb = new UserDBRepository("jdbc:postgresql://localhost:5432/socialNetworkDB", "postgres", "tigancopt64", new UserValidator());
+        Repository<Tuple<Long, Long>, Friendship> networkDb = new FriendshipDBRepository("jdbc:postgresql://localhost:5432/socialNetworkDB", "postgres", "tigancopt64", new FriendshipValidator());
+        Service service = new Service(repoDb, networkDb);
         Ui ui = new Ui(service);
         while (true) {
             System.out.println("\n1:add user\n" +
@@ -30,7 +34,9 @@ public class Main {
                     "4:remove friendship\n"+
                     "5:number of communities\n"+
                     "6:most socializable community\n"+
-                    "7:exit");
+                    "7:exit\n" +
+                    "8:update User\n");
+                    //"9.update Friendship");
             System.out.println("Command = ");
             int input = Integer.parseInt(stdin.readLine());
             if(input==0) break;
@@ -71,6 +77,24 @@ public class Main {
                     break;
                 case 7:
                     return;
+                case 8:
+                    System.out.println("last name = ");
+                    lastName = stdin.readLine();
+                    System.out.println("first name = ");
+                    firstName = stdin.readLine();
+                    System.out.println("new last name = ");
+                    String lastName1 = stdin.readLine();
+                    System.out.println("new first name = ");
+                    String firstName1 = stdin.readLine();
+                    ui.updateUser(lastName, firstName, lastName1, firstName1);
+                    break;
+                case 9:
+                    System.out.println("id1 = ");
+                    id1 = Long.parseLong(stdin.readLine());
+                    System.out.println("id2 = ");
+                    id2 = Long.parseLong(stdin.readLine());
+                    ui.updateFrienship(id1, id2);
+                    break;
                 default:
                     System.out.println("Incorrect argument");
                     break;

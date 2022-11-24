@@ -66,54 +66,6 @@ public class User extends Entity<Long>{
     }
 
 
-    /***
-     * return list of friends
-     * */
-    public List<User> getFriends() {
-        return friends;
-    }
-
-
-    /***
-     * set a list for friends
-     * */
-    public void setFriends(List<User> friends) {
-        this.friends = friends;
-    }
-
-    /**
-     * add friend in friend list
-     * @param u - User
-     * @return boolean
-     */
-    public boolean addFriend(User u) {
-        if (friends != null) {
-            for (User u1 : friends) {
-                if (u1 == u)
-                    return false;
-            }
-        }
-        this.friends.add(u);
-        return true;
-    }
-
-    /***
-     * delete a friend in friend list
-     * @param u - User
-     * @return boolean
-     */
-    public boolean removeFriend(User u) {
-        if (friends != null) {
-            for (User u1 : friends) {
-                if (u1 == u) {
-                    friends.remove(u1);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     /***
      * Override Equals function
